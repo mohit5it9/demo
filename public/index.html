@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" type="text/css" href="theme.css">
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <div id="onlineUsers"></div>
+    <div id="typing"></div>
+    <form action="" onsubmit = 'return msgFormSubmit()'>
+      <input id="messageText" autocomplete="off"  /><button>Send</button>
+    </form>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="jquery-latest.min.js"></script>
+    <script>
+      var socket = io();
+      var timer;
+      function msgFormSubmit(){
+        var element = document.getElementById('messageText');
+        socket.emit('chat message', element.value);
+        element.value = '';
+        return false;
+      };
+      document.getElementById('messageText').onkeydown =  function msgTextKeydown(e){
+        if(e.keyCode != 13){
+          socket.emit('typing event','Someone is typing....');
+          clearTimeout(timer);
+          timer = setTimeout(function(){
+            socket.emit('typing event',false)
+          }, 1000);
+        }
+      };
+      socket.on('typing event',function(data){
+        if(data){
+          $('#typing').html(data);
+        }
+        else{
+          $('#typing').html('');
+        }
+      });
+      socket.on('emit message', function(msg){
+        $('#messages').append($('<li>').text(msg));
+      });
+      socket.on('chat connections',function(users){
+        $('#onlineUsers').text('Online Users : '+users);
+      })
+    </script>
+  </body>
+</html>
