@@ -16,7 +16,6 @@ io.on('connection', function(socket){
    	io.emit('emit message', user,msg);
   	});
   	socket.on('typing event',function(data){
-      console.log(data);
   		socket.broadcast.emit('typing event',data);
   	});
   	socket.on('disconnect',function(){
