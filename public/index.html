@@ -12,7 +12,6 @@
       <input id="messageText" autocomplete="off"  /><button>Send</button>
     </form>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="jquery-latest.min.js"></script>
     <script>
       var socket = io();
       var timer;
@@ -33,18 +32,22 @@
       };
       socket.on('typing event',function(data){
         if(data){
-          $('#typing').html(data);
+          document.getElementById('typing').innerHTML = data;
         }
         else{
-          $('#typing').html('');
+          document.getElementById('typing').innerHTML = '';
         }
       });
       socket.on('emit message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+        var li = document.createElement('li');
+        var textNode = document.createTextNode(msg);
+        li.appendChild(textNode);
+        //node.innerHTML = msg;    //innerHTML also can be used but TextNode is more faster
+        document.getElementById('messages').appendChild(li);
       });
       socket.on('chat connections',function(users){
-        $('#onlineUsers').text('Online Users : '+users);
-      })
+        document.getElementById('onlineUsers').innerHTML = 'Online Users : ' + users;
+      });
     </script>
   </body>
 </html>
