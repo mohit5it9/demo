@@ -24,7 +24,8 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
-      var timer;
+      var keyupTimer;
+      var keydownTimer;
       var username;
       function usernameSubmit(){
         username = document.getElementById('username').value;
@@ -46,9 +47,12 @@
       };
       document.getElementById('messageText').onkeydown =  function msgTextKeydown(e){
         if(e.keyCode != 13){
-          socket.emit('typing event', username + ' is typing....');
-          clearTimeout(timer);
-          timer = setTimeout(function(){
+          clearTimeout(keydownTimer);
+          keydownTimer = setTimeout(function(){
+            socket.emit('typing event', '<b>'+username+'</b>' + ' is typing....');
+          }, 200);
+          clearTimeout(keyupTimer);
+          keyupTimer = setTimeout(function(){
             socket.emit('typing event',false)
           }, 1000);
         }
