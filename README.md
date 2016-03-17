@@ -5,3 +5,6 @@
 	<li> Implemented the 'is typing' feature </li>
 	<li> Users can send messages to each other </li>
 </ul>
+
+Future Works: <li>Cresting chat rooms where users can join</li>
+<li>Private Messaging</li>
